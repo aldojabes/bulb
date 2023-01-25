@@ -3,18 +3,21 @@
 #define LED D7
 #define LightSensor A0
 WiFiClient wifiClient;
-const int threshold = 300;
+const int threshold = 200;
 void setup() {
 pinMode(LED, OUTPUT);
 connectWifi();    // LED pin as output.
 }
 void loop() {
+  Serial.println(analogRead(LightSensor));
   processResponse(); 
+  lowlight();
   delay(200);
 }
 void processResponse(){
   HTTPClient http;   
-  String Link = "http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/device.php";
+  // String Link = "http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/device.php";
+  String Link = "http://192.168.1.103/bulb/device.php";
   
   http.begin(wifiClient,Link);     //Specify request destination
   
@@ -54,12 +57,24 @@ void connectWifi(){
 }
 
 void lowlight(){
-   if (analogRead(LightSensor) < threshold) {
-    // low light, so switch the light (LED) on
-    digitalWrite(LED, HIGH);
-  }
-  else {
-    // light level high enough, so switch the light (LED) off
-    digitalWrite(LED, LOW);
+  Serial.println("burigo");
+   if (analogRead(LightSensor) > threshold) {
+     HTTPClient http;
+     http.begin(wifiClient,"http://192.168.1.103/bulb/getstatus.php");
+     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+     String RequestData = "status=off"; 
+     int ResponseCode = http.POST(RequestData);
+      Serial.print("HTTP Response code for off: ");
+      Serial.println(ResponseCode);
+     http.end();
+  }else {
+    HTTPClient http;
+     http.begin(wifiClient,"http://192.168.1.103/bulb/getstatus.php");
+     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+     String RequestData = "status=on"; 
+     int ResponseCode = http.POST(RequestData);
+      Serial.print("HTTP Response code for on: ");
+      Serial.println(ResponseCode);
+     http.end();
   }
 }

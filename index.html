@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Home</title>
     <link rel="shortcut icon" href="ico.png" type="image/x-icon">
+
     <style>
       .container {
         width: 100%;
@@ -91,6 +92,7 @@ p {
       <input type="checkbox" id="bulb" onclick="validate()">
       <span class="slider round"></span>
     </label>
+    <p id="status"></p>
   </div>
 <script type=text/javascript>
     function validate(){
@@ -99,6 +101,7 @@ p {
         } else {
             sendOff();
         }
+        // document.getElementById("status").innerHTML = "burigo";
     }
     function sendOn(){
     var details = {
@@ -142,7 +145,17 @@ p {
         body: formBody
       })
     }
+    //status of the bulb
+    function update() {
+      $.get("http://localhost/bulb/bulbstatus.php", function(data) {
+        $("#status").html("bulb status: "+data);
+        window.setTimeout(update, 1000);
+      });
+    }
+    window.onload = update;
+
 </script>
+<script type="text/javascript" src="./jquery.js"></script>
 </body>
 </html>
 <!-- http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/browser.php -->
