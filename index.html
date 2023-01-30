@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,100 +9,190 @@
     <link rel="shortcut icon" href="ico.png" type="image/x-icon">
 
     <style>
-      .container {
-        width: 100%;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      }
-        /* The switch - the box around the slider */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #222;
+        }
 
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+        body.on {
+            background: radial-gradient(#555, #111);
+        }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+        .bulb {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background: #444;
+            border-radius: 50%;
+            z-index: 2;
+        }
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
+        body.on .bulb {
+            background: #fff;
+            box-shadow: 0 0 50px #fff,
+                0 0 100px #fff,
+                0 0 150px #fff,
+                0 0 200px #fff,
+                0 0 250px #fff,
+                0 0 300px #fff,
+                0 0 350px #fff;
+        }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
+        .bulb::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 22.5px;
+            width: 35px;
+            height: 80px;
+            background: #444;
+            border-top: 30px solid #000;
+            border-radius: 10px;
+        }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
+        body.on .bulb::before {
+            background: #fff;
+        }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
+        body.on .bulb::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: #fff;
+            border-radius: 50%;
+            filter: blur(40px);
+        }
 
-.slider.round:before {
-  border-radius: 50%;
-}
+        .bulb span:nth-child(1) {
+            position: absolute;
+            top: -16px;
+            left: -4px;
+            display: block;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            transform: rotate(342deg);
+            border-bottom-right-radius: 40px;
+            box-shadow: 20px 20px 0 10px #444;
+        }
 
-p {
-  font-weight: bold;
-  font-family: 'Times New Roman', Times, serif;
-}
+        body.on .bulb span:nth-child(1) {
+            box-shadow: 20px 20px 0 10px #fff;
+        }
+
+        .bulb span:nth-child(2) {
+            position: absolute;
+            top: -16px;
+            right: -4px;
+            display: block;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            transform: rotate(17deg);
+            border-bottom-left-radius: 40px;
+            box-shadow: -20px 20px 0 10px #444;
+        }
+
+        body.on .bulb span:nth-child(2) {
+            box-shadow: -20px 20px 0 10px #fff;
+        }
+
+        .wire {
+            position: absolute;
+            left: calc(50% - 2px);
+            bottom: 50%;
+            width: 4px;
+            height: 60vh;
+            background: #000;
+            z-index: 1;
+        }
+
+        .switch {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(#eee, #ccc, #eee);
+            border: 3px solid #000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .switch .btn {
+            position: relative;
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(#777, #fff, #777);
+            border-radius: 6px;
+            border: 2px solid #000;
+            cursor: pointer;
+        }
+
+        .switch .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 85%;
+            background: linear-gradient(#fff, #fff);
+            border-radius: 4px;
+        }
+
+        .on .switch .btn::before {
+            top: 15%;
+        }
+
+        #audio {
+            display: none;
+        }
     </style>
 </head>
+
 <body>
-  <div class="container">
-    <p>Lights control</p>
-    <label class="switch">
-      <input type="checkbox" id="bulb" onclick="validate()">
-      <span class="slider round"></span>
-    </label>
-    <p id="status"></p>
-  </div>
-<script type=text/javascript>
+
+    <div class="light">
+        <div class="wire"></div>
+        <div class="bulb">
+            <span></span>
+            <span></span>
+        </div>
+        <div class="switch">
+            <div class="btn"></div>
+        </div>
+    </div>
+    <!-- add sound on click -->
+    <audio id="audio" src="click.mp3" autostart="false"></audio>
+    <script type=text/javascript>
+let btn = document.querySelector('.btn');
+        let body = document.querySelector('body');
+        let audio = document.querySelector('#audio');
+        btn.onclick = function(){
+                audio.play();
+            validate();
+        }
     function validate(){
-        if (document.getElementById('bulb').checked){
-            sendOn()
+        if (body.classList.contains('on')){
+            sendOn();
         } else {
             sendOff();
         }
-        // document.getElementById("status").innerHTML = "burigo";
     }
     function sendOn(){
     var details = {
@@ -148,6 +239,11 @@ p {
     //status of the bulb
     function update() {
       $.get("http://localhost/bulb/bulbstatus.php", function(data) {
+        if(data == "on"){
+            body.classList.add('on');
+        }else{
+            body.classList.remove('on');
+        }
         $("#status").html("bulb status: "+data);
         window.setTimeout(update, 1000);
       });
@@ -155,7 +251,8 @@ p {
     window.onload = update;
 
 </script>
-<script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript" src="./jquery.js"></script>
 </body>
+
 </html>
 <!-- http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/browser.php -->

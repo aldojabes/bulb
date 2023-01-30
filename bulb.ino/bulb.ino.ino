@@ -17,7 +17,7 @@ void loop() {
 void processResponse(){
   HTTPClient http;   
   // String Link = "http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/device.php";
-  String Link = "http://192.168.1.103/bulb/device.php";
+  String Link = "http://192.168.0.172/bulb/device.php";
   
   http.begin(wifiClient,Link);     //Specify request destination
   
@@ -41,7 +41,7 @@ void connectWifi(){
   WiFi.mode(WIFI_OFF);        //Prevents reconnection issue (taking too long to connect)
   delay(1000);
   WiFi.mode(WIFI_STA);        //This line hides the viewing of ESP as wifi hotspot
-  WiFi.begin("Benax-WiFi(2.4G)","");     //Connect to your WiFi router
+  WiFi.begin("Benax-WiFi(2.4G)","Rc@Nyabihu2023");     //Connect to your WiFi router
   Serial.println("");
   Serial.print("Connecting");
   // Wait for connection
@@ -60,7 +60,7 @@ void lowlight(){
   Serial.println("burigo");
    if (analogRead(LightSensor) > threshold) {
      HTTPClient http;
-     http.begin(wifiClient,"http://192.168.1.103/bulb/getstatus.php");
+     http.begin(wifiClient,"http://192.168.0.172/bulb/getstatus.php");
      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
      String RequestData = "status=off"; 
      int ResponseCode = http.POST(RequestData);
@@ -69,7 +69,7 @@ void lowlight(){
      http.end();
   }else {
     HTTPClient http;
-     http.begin(wifiClient,"http://192.168.1.103/bulb/getstatus.php");
+     http.begin(wifiClient,"http://192.168.0.172/bulb/getstatus.php");
      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
      String RequestData = "status=on"; 
      int ResponseCode = http.POST(RequestData);
