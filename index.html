@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Home</title>
     <link rel="shortcut icon" href="ico.png" type="image/x-icon">
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             display: flex;
             justify-content: center;
@@ -22,11 +19,9 @@
             min-height: 100vh;
             background: #222;
         }
-
         body.on {
             background: radial-gradient(#555, #111);
         }
-
         .bulb {
             position: relative;
             width: 80px;
@@ -35,7 +30,6 @@
             border-radius: 50%;
             z-index: 2;
         }
-
         body.on .bulb {
             background: #fff;
             box-shadow: 0 0 50px #fff,
@@ -46,7 +40,6 @@
                 0 0 300px #fff,
                 0 0 350px #fff;
         }
-
         .bulb::before {
             content: '';
             position: absolute;
@@ -58,11 +51,9 @@
             border-top: 30px solid #000;
             border-radius: 10px;
         }
-
         body.on .bulb::before {
             background: #fff;
         }
-
         body.on .bulb::after {
             content: '';
             position: absolute;
@@ -75,7 +66,6 @@
             border-radius: 50%;
             filter: blur(40px);
         }
-
         .bulb span:nth-child(1) {
             position: absolute;
             top: -16px;
@@ -88,11 +78,9 @@
             border-bottom-right-radius: 40px;
             box-shadow: 20px 20px 0 10px #444;
         }
-
         body.on .bulb span:nth-child(1) {
             box-shadow: 20px 20px 0 10px #fff;
         }
-
         .bulb span:nth-child(2) {
             position: absolute;
             top: -16px;
@@ -105,11 +93,9 @@
             border-bottom-left-radius: 40px;
             box-shadow: -20px 20px 0 10px #444;
         }
-
         body.on .bulb span:nth-child(2) {
             box-shadow: -20px 20px 0 10px #fff;
         }
-
         .wire {
             position: absolute;
             left: calc(50% - 2px);
@@ -119,7 +105,6 @@
             background: #000;
             z-index: 1;
         }
-
         .switch {
             position: absolute;
             bottom: 50px;
@@ -133,7 +118,6 @@
             justify-content: center;
             align-items: center;
         }
-
         .switch .btn {
             position: relative;
             width: 30px;
@@ -143,7 +127,6 @@
             border: 2px solid #000;
             cursor: pointer;
         }
-
         .switch .btn::before {
             content: '';
             position: absolute;
@@ -154,19 +137,15 @@
             background: linear-gradient(#fff, #fff);
             border-radius: 4px;
         }
-
         .on .switch .btn::before {
             top: 15%;
         }
-
         #audio {
             display: none;
         }
     </style>
 </head>
-
 <body>
-
     <div class="light">
         <div class="wire"></div>
         <div class="bulb">
@@ -198,7 +177,6 @@ let btn = document.querySelector('.btn');
     var details = {
     'state': 'on'
       };
-
       var formBody = [];
       for (var property in details) {
         var encodedKey = encodeURIComponent(property);
@@ -206,8 +184,7 @@ let btn = document.querySelector('.btn');
         formBody.push(encodedKey + "=" + encodedValue);
       }
       formBody = formBody.join("&");
-
-      fetch('/bulb/browser.php', {
+      fetch('http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/bulbstatus.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -219,7 +196,6 @@ let btn = document.querySelector('.btn');
       var details = {
     'state': 'off'
       };
-
       var formBody = [];
       for (var property in details) {
         var encodedKey = encodeURIComponent(property);
@@ -227,8 +203,7 @@ let btn = document.querySelector('.btn');
         formBody.push(encodedKey + "=" + encodedValue);
       }
       formBody = formBody.join("&");
-
-      fetch('/bulb/browser.php', {
+      fetch('http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/bulbstatus.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -238,7 +213,7 @@ let btn = document.querySelector('.btn');
     }
     //status of the bulb
     function update() {
-      $.get("http://localhost/bulb/bulbstatus.php", function(data) {
+      $.get("http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/bulbstatus.php", function(data) {
         if(data == "on"){
             body.classList.add('on');
         }else{
@@ -249,10 +224,8 @@ let btn = document.querySelector('.btn');
       });
     }
     window.onload = update;
-
 </script>
     <script type="text/javascript" src="./jquery.js"></script>
 </body>
-
 </html>
 <!-- http://iot.benax.rw/projects/38db9f4aba26c82191c27b38d92aac2c/bulb/browser.php -->
